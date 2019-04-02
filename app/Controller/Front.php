@@ -1,6 +1,7 @@
 <?php
 namespace StarterKit\Controller;
 
+use StarterKit\Helper\Assets;
 use StarterKit\Helper\Utils;
 
 /**
@@ -88,38 +89,32 @@ class Front {
 		}
 
 		// JS scripts
-		wp_enqueue_script( 'jquery' );
-		wp_register_script(
-			'google-fonts', get_template_directory_uri() . '/assets/libs/google-fonts/webfont.js',
+		Assets::enqueue_script('jquery');
+		Assets::enqueue_script(
+			'google-fonts',
+			'/assets/libs/google-fonts/webfont.js',
 			false,
-			Starter_Kit()->config['cache_time'],
+			false,
 			true
 		);
-		wp_register_script(
-			'starter-kit-front',
-			get_template_directory_uri() . '/assets/js/app.min.js',
-			array(
-				'jquery',
-				'google-fonts'
-			), Starter_Kit()->config['cache_time'], true
-		);
+		Assets::enqueue_script_dist('starter-kit-front', 'app.min.js', array( 'jquery', 'google-fonts' ));
 
 		$js_vars = array(
 			'ajaxurl'    => esc_url( admin_url( 'admin-ajax.php' ) ),
 			'assetsPath' => get_template_directory_uri() . '/assets',
 		);
 
-		wp_enqueue_script( 'starter-kit-front' );
+		Assets::enqueue_script( 'starter-kit-front' );
 		wp_localize_script( 'starter-kit-front', 'themeJsVars', $js_vars );
 
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-			wp_enqueue_script( 'comment-reply' );
+			Assets::enqueue_script( 'comment-reply' );
 		}
 
 		if ( $this->antispam_enabled() === 1 ) {
-			wp_enqueue_script(
+			Assets::enqueue_script(
 				'starter-kit-antispam',
-				get_template_directory_uri() . '/assets/js/antispam.js',
+				'/assets/js/antispam.js',
 				array(
 					'jquery',
 				),
@@ -129,16 +124,8 @@ class Front {
 
 
 		// CSS styles
-		wp_enqueue_style(
-			'starter-kit-libs',
-			get_template_directory_uri() . '/assets/css/libs/libs.css', false,
-			Starter_Kit()->config['cache_time']
-		);
-		wp_enqueue_style(
-			'starter-kit-style',
-			get_template_directory_uri() . '/assets/css/front/front.css',
-			false, Starter_Kit()->config['cache_time']
-		);
+		Assets::enqueue_style_dist('starter-kit-libs', 'libs.css');
+		Assets::enqueue_style_dist('starter-kit-front', 'front.css');
 
 	}
 
@@ -148,7 +135,7 @@ class Front {
 	 * @return int
 	 */
 	public function antispam_enabled() {
-		return (int) utils::get_option( 'forms_antispam', 0 );
+		return (int) Utils::get_option( 'forms_antispam', 0 );
 	}
 
 	/**
@@ -211,7 +198,7 @@ class Front {
 	 * Load Google Tag Manager
 	 **/
 	public function add_gtm_head() {
-		$tag_manager_code = utils::get_option( 'tag_manager_code', '' );
+		$tag_manager_code = Utils::get_option( 'tag_manager_code', '' );
 		$site_url         = get_site_url();
 
 		if ( ! empty( $tag_manager_code ) && strpos( $site_url, 'wpengine.com' ) === false ) {
@@ -224,11 +211,9 @@ class Front {
 
 	/**
 	 * add GTM after open <body> tag
-	 *
-	 * @throws \Exception
 	 */
 	public function add_gtm_body() {
-		$tag_manager_code = utils::get_option( 'tag_manager_code', '' );
+		$tag_manager_code = Utils::get_option( 'tag_manager_code', '' );
 		$site_url         = get_site_url();
 
 		if ( ! empty( $tag_manager_code ) && strpos( $site_url, 'wpengine.com' ) === false ) {

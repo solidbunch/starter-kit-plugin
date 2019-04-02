@@ -32,29 +32,15 @@ scriptsArray.reduce((acc, item) => {
 // include the css extraction and minification plugins
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+
 baseConfig.plugins.push(
 	new MiniCssExtractPlugin({
-		filename: '[name]/assets/style.css'
+		filename: './dist/css/widget-[name].css'
 	})
 );
-
-baseConfig.module.rules.push(
-	// images loader
-	{
-		test: /\.(png|jpg|svg|gif)$/i,
-		exclude: path.resolve('node_modules/'),
-		use: [{
-			loader: 'url-loader',
-			options: {
-				limit: 9999999999
-			}
-		}]
-	},
-);
-
 baseConfig.output = {
-	path: dir + '/app/Widgets/',
-	filename: '[name]/assets/scripts.min.js'
+	path: dir,
+	filename: './dist/js/widget-[name].min.js'
 };
 
 module.exports = Object.assign(

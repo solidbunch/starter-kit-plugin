@@ -12,7 +12,7 @@ use StarterKit\Helper\Utils;
  * @package    Starter Kit Backend
  * @author     SolidBunch
  * @link       https://solidbunch.com
- * @version    Release: 1.0.1
+ * @version    Release: 1.0.0
  * @since      Class available since Release 1.0.1
  */
 class Optimization {
@@ -20,14 +20,14 @@ class Optimization {
 	public function __construct() {
 
 		add_action( 'init', function () {
-			if ( utils::get_option( 'clean_wp_head', false ) ) {
+			if ( Utils::get_option( 'clean_wp_head', false ) ) {
 				$this->head_cleanup();
 			}
-			if ( utils::get_option( 'disable_trackbacks', false ) ) {
+			if ( Utils::get_option( 'disable_trackbacks', false ) ) {
 				$this->disable_trackbacks();
 			}
 
-			if ( utils::get_option( 'assets_versions', false ) ) {
+			if ( Utils::get_option( 'assets_versions', false ) ) {
 				add_filter( 'script_loader_src', [ $this, 'remove_script_version' ], 15, 1 );
 				add_filter( 'style_loader_src', [ $this, 'remove_script_version' ], 15, 1 );
 			}

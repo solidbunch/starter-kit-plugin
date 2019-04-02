@@ -12,8 +12,8 @@ use StarterKit\Helper\Utils;
  * @package    Starter Kit Backend
  * @author     SolidBunch
  * @link       https://solidbunch.com
- * @version    Release: 1.0.1
- * @since      Class available since Release 1.0.1
+ * @version    Release: 1.0.0
+ * @since      Class available since Release 1.0.0
  */
 class HTTP2 {
 
@@ -21,7 +21,7 @@ class HTTP2 {
 	 * Cloudflare gives an HTTP 520 error when more than 8k of headers are present. Limiting $this
 	 * plugin's output to 4k should keep those errors away.
 	 */
-	const HTTP2_MAX_HEADER_SIZE = 1024 * 400;
+	const HTTP2_MAX_HEADER_SIZE = 1024 * 200;
 	protected $http2_header_size_accumulator = 0;
 	/** @var array */
 	protected $assets = [];
@@ -31,8 +31,8 @@ class HTTP2 {
 	 */
 	public function __construct() {
 		add_action( 'init', function () {
-			$scripts = utils::get_option( 'http2_scripts_enable', false );
-			$styles  = utils::get_option( 'http2_styles_enable', false );
+			$scripts = Utils::get_option( 'http2_scripts_enable', false );
+			$styles  = Utils::get_option( 'http2_styles_enable', false );
 
 			if ( ( $scripts || $styles ) && ! is_admin() ) {
 				$this->http2_ob_start();
@@ -82,7 +82,7 @@ class HTTP2 {
 			$preload_src = apply_filters( 'http2_link_preload_src', $src );
 			if ( ! empty( $preload_src ) ) {
 				$header = sprintf(
-					'Link: <%s>; rel=preload; as=%s',
+					'Link: <%s>; rel=preload; as=%s; nopush;',
 					esc_url( $this->http2_link_url_to_relative_path( $preload_src ) ),
 					sanitize_html_class( $this->http2_link_resource_hint_as( current_filter() ) )
 				);
