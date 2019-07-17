@@ -11,7 +11,7 @@
  * @since      1.0.0
  *
  * @starter-kit-plugin
- * Plugin Name: Starter Kit Plugin
+ * Plugin Name: Starter Kit
  * Plugin URI: https://github.com/SolidBunch/Starter-Kit-Plugin
  * Description: Starter kit for your plugin.
  * Version: 1.0.0

@@ -8,7 +8,7 @@ var config = {
 		textdomain: 'starter-kit',	// Change textdomain
 		styles: 'starter-kit',		// Change CSS styles prefix
 		author: 'SolidBunch',		// Change author
-		plugin_uri: 'https://github.com/SolidBunch/Starter-Kit', 	// Change plugin URI
+		plugin_uri: 'https://github.com/SolidBunch/starter-kit-plugin', 	// Change plugin URI
 		author_uri: 'https://solidbunch.com',	// Change author URI
 	}
 };
@@ -47,7 +47,7 @@ gulp.task('replaceNames', function () {
 		.pipe(stringReplace('Starter Kit Plugin', config.plugin.name))
 
 		.pipe(stringReplace('SolidBunch', config.plugin.author))
-		.pipe(stringReplace('https://github.com/SolidBunch/Starter-Kit', config.plugin.plugin_uri))
+		.pipe(stringReplace('https://github.com/SolidBunch/starter-kit-plugin', config.plugin.plugin_uri))
 		.pipe(stringReplace('https://solidbunch.com', config.plugin.author_uri))
 
 		.pipe(gulp.dest(function (file) {
