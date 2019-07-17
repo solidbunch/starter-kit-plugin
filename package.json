@@ -1,7 +1,7 @@
 {
   "name": "starter-kit",
   "version": "1.0.0",
-  "description": "Starter Kit Theme",
+  "description": "Starter Kit Plugin",
   "dependencies": {
     "animate.css": "^3.7.0",
     "babel-preset-es2015": "^6.24.1",
