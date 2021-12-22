@@ -25,6 +25,8 @@
 *.DS_Store
 .DS_Store
 .DS_Store?
+.AppleDouble
+.LSOverride
 ._*
 .Spotlight-V100
 .Trashes
@@ -45,11 +47,17 @@ access_log
 *.LICENSE
 
 
-#===================================#
-#       Config. and npm Files       #
-#===================================#
+#=======================#
+#       Libraries       #
+#=======================#
 node_modules
+vendor
 
+
+#==========================================#
+#       Compiled code. It should not always be tracked.       #
+#==========================================#
+#dist/
 
 
 ## Use these to get more specific ##
@@ -58,5 +66,3 @@ node_modules
 #      Specific Plugins     #
 #===========================#
 build/broswer-sync.config.js
-#Additionals
-/vendor/

@@ -1,102 +1,56 @@
 <?php
-
 /**
- * The plugin bootstrap file
+ * Starter Kit Plugin
  *
- * @category   Wordpress
- * @package    Starter Kit Plugin
- * @author     SolidBunch
- * @link       https://solidbunch.com
- * @version    Release: 1.0.0
- * @since      1.0.0
+ * @package           starter-kit-plugin
+ * @author            SolidBunch
+ * @link              https://github.com/solidbunch/starter-kit-plugin
+ * @license           https://github.com/solidbunch/starter-kit-plugin/blob/master/LICENSE.md MIT
  *
- * @starter-kit-plugin
- * Plugin Name: Starter Kit
- * Plugin URI: https://github.com/SolidBunch/Starter-Kit-Plugin
- * Description: Starter kit for your plugin.
- * Version: 1.0.0
- * Author: SolidBunch
- * Author URI: https://solidbunch.com
- * License: GPL-2.0+
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: starter-kit-plugin
- * Domain Path: /languages
+ * @wordpress-plugin
+ * Plugin Name:       Starter Kit Plugin
+ * Plugin URI:        https://github.com/solidbunch/starter-kit-plugin
+ * Description:       WordPress starter plugin with a modern development stack for launching projects faster and easily
+ * Version:           1.4.0
+ * Requires at least: 5.2
+ * Requires PHP:      7.4
+ * Author:            SolidBunch
+ * Author URI:        https://solidbunch.com
+ * Text Domain:       starter-kit-plugin
+ * Domain Path:       /languages
+ * License:           MIT
+ * License URI:       https://github.com/solidbunch/starter-kit-plugin/blob/master/LICENSE.md
  */
 
+use StarterKitPlugin\App;
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+defined( 'ABSPATH' ) || exit; // Exit if accessed directly
+
+//define plugin path and url without slash
+define( 'STARTER_KIT_PLUGIN_DIR', __DIR__ );
+define( 'STARTER_KIT_PLUGIN_FILE', __FILE__ );
+define( 'STARTER_KIT_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+
+if ( PHP_VERSION_ID < 70400 ) {
+	wp_die( sprintf( __( 'Starter Kit Plugin require at least PHP 7.4.0 ( You are using PHP %s ) ' ), PHP_VERSION ) );
 }
 
-/**
- * Currently plugin version.
- * Start at version 1.0.0 and use SemVer - https://semver.org
- * Rename this for your plugin and update it as you release new versions.
- */
-define( 'PLUGIN_NAME_VERSION', '1.0.0' );
+// Helper functions for develop
+require_once STARTER_KIT_PLUGIN_DIR . '/dev.php';
 
-// helper functions for developers
-require_once __DIR__ . '/app/dev.php';
+// Autoload
+require_once STARTER_KIT_PLUGIN_DIR . '/autoload.php';
 
-if(class_exists('WP_CLI')) {
-	//define theme root directory for future commands
-	define('THEME_ROOT_DIRECTORY' , __DIR__);
-	//load commands for dir
-	foreach (glob(__DIR__ . '/dev/cli/*.php') as $file) {
-		require $file;
-	}
+// Run App Singleton
+$app    = App::getInstance();
+$config = apply_filters( 'starter-kit-plugin/config', require STARTER_KIT_PLUGIN_DIR . '/config/config.php' );
+
+try {
+	$app->run( $config );
+} catch ( Exception $exception ) {
+	wlog( $exception );
+	/*	header( 'HTTP/1.1 503 Service Temporarily Unavailable' );
+		header( 'Status: 503 Service Temporarily Unavailable' );
+		header( 'Retry-After: 300' );// 300 seconds.
+		die();*/
 }
-
-
-/**
- * After registering this autoload function with SPL, the following line
- * would cause the function to attempt to load the \Foo\Bar\Baz\Qux class
- * from /path/to/project/src/Baz/Qux.php:
- *
- *      new \Foo\Bar\Baz\Qux;
- *
- * @param string $class The fully-qualified class name.
- *
- * @return void
- */
-spl_autoload_register( function ( $class ) {
-	
-	// project-specific namespace prefix
-	$prefix = 'StarterKit\\';
-	
-	// base directory for the namespace prefix
-	$base_dir = __DIR__ . '/app/';
-	
-	// does the class use the namespace prefix?
-	$len = strlen( $prefix );
-	if ( strncmp( $prefix, $class, $len ) !== 0 ) {
-		// no, move to the next registered autoloader
-		return;
-	}
-	
-	// get the relative class name
-	$relative_class = substr( $class, $len );
-	
-	// replace the namespace prefix with the base directory, replace namespace
-	// separators with directory separators in the relative class name, append
-	// with .php
-	$file = $base_dir . str_replace( '\\', '/', $relative_class ) . '.php';
-	
-	// if the file exists, require it
-	if ( file_exists( $file ) ) {
-		require $file;
-	}
-} );
-
-// Global point of enter
-if ( ! function_exists( 'Starter_Kit' ) ) {
-	
-	function Starter_Kit() {
-		return \StarterKit\App::getInstance();
-	}
-	
-}
-
-// Run the theme
-Starter_Kit()->run();
