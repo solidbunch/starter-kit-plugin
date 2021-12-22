@@ -23,6 +23,7 @@
  */
 
 use StarterKitPlugin\App;
+use StarterKitPlugin\Helper\Utils;
 
 defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 
@@ -47,10 +48,7 @@ $config = apply_filters( 'starter-kit-plugin/config', require STARTER_KIT_PLUGIN
 
 try {
 	$app->run( $config );
-} catch ( Exception $exception ) {
-	wlog( $exception );
-	/*	header( 'HTTP/1.1 503 Service Temporarily Unavailable' );
-		header( 'Status: 503 Service Temporarily Unavailable' );
-		header( 'Retry-After: 300' );// 300 seconds.
-		die();*/
+} catch ( Throwable $throwable ) {
+	//Utils::setErrorHandler();
+	Utils::errorHandler( $throwable );
 }
