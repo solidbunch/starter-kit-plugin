@@ -1,21 +1,10 @@
-###############################################################################
-##                                                                            #
-##		GIT IGNORE FOR WORDPRESS SITES     		                              #
-##		------------------------------     									  #
-##		Adapted from: http://bigwilliam.com/gitignore-for-wordpress-projects/ #
-##                                                                            #
-###############################################################################
-
-###############################################################################
-##                                                                            #
-##       NOTE: TO STOP TRACKING A FILE AFTER IGNORING IT,                     #
-##             USE THESE GIT COMMANDS:                                        #
-##                                                                            #
-##             git rm --cached <file>                                         #
-##             git add . # or git add <file>                                  #
-##                                                                            #
-###############################################################################
-
+#####################################################################################
+##                                                                                  #
+##                       GIT IGNORE FOR WORDPRESS SITES                             #
+##    ------------------------------                                                #
+##    Adapted https://github.com/github/gitignore/blob/master/WordPress.gitignore   #
+##                                                                                  #
+#####################################################################################
 
 ## OS and Utility Stuff ##
 
@@ -25,19 +14,27 @@
 *.DS_Store
 .DS_Store
 .DS_Store?
-.AppleDouble
-.LSOverride
 ._*
 .Spotlight-V100
 .Trashes
 ehthumbs.db
 *[Tt]humbs.db
 *.Trashes
-.idea
 
-#==================#
-#    Log files     #
-#==================#
+
+#===================#
+#     IDE Files     #
+#===================#
+.idea
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+*.codekit3
+
+
+#===================================#
+#    Log, map files, secret .env    #
+#===================================#
 *.log
 error_log
 access_log
@@ -45,24 +42,21 @@ access_log
 *.css.map
 *.js.map
 *.LICENSE
+*.lck
 
 
-#=======================#
-#       Libraries       #
-#=======================#
+#=============================#
+#    Config, secrets, .env    #
+#=============================#
+.env
+.env.*override
+.env.*secret
+
+
+## Vendor, Libs and Content ##
+
+#===================================#
+#       Vendor and npm Files        #
+#===================================#
 node_modules
 vendor
-
-
-#==========================================#
-#       Compiled code. It should not always be tracked.       #
-#==========================================#
-#dist/
-
-
-## Use these to get more specific ##
-
-#===========================#
-#      Specific Plugins     #
-#===========================#
-build/broswer-sync.config.js
