@@ -1,33 +1,56 @@
 <?php
-
 /**
- * Fired when the plugin is uninstalled.
+ * Starter Kit Plugin Uninstall
  *
- * When populating this file, consider the following flow
- * of control:
+ * Uninstalling Starter Kit Plugin and deleting database data.
  *
- * - This method should be static
- * - Check if the $_REQUEST content actually is the plugin name
- * - Run an admin referrer check to make sure it goes through authentication
- * - Verify the output of $_GET makes sense
- * - Repeat with other user roles. Best directly by using the links/query string parameters.
- * - Repeat things for multisite. Once for a single site in the network, once sitewide.
- *
- * This file may be updated more in future version of the Boilerplate; however, this is the
- * general skeleton and outline for how the file should work.
- *
- * For more information, see the following discussion:
- * https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/pull/123#issuecomment-28541913
- *
- * @category   Wordpress
- * @package    Starter Kit Plugin
- * @author     SolidBunch
- * @link       https://solidbunch.com
- * @version    Release: 1.0.0
- * @since      1.0.0
+ * @package           starter-kit-plugin
+ * @author            SolidBunch
  */
 
-// If uninstall not called from WordPress, then exit.
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit;
+use StarterKitPlugin\Helper\Utils;
+
+defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
+
+//define plugin path and url without slash
+define( 'STARTER_KIT_PLUGIN_DIR', __DIR__ );
+define( 'STARTER_KIT_PLUGIN_FILE', __FILE__ );
+define( 'STARTER_KIT_PLUGIN_URL', plugins_url( '', __FILE__ ) );
+
+// Autoload
+require_once STARTER_KIT_PLUGIN_DIR . '/autoload.php';
+
+$settings_prefix = Utils::getConfigSetting( 'settings_prefix', '', true );
+
+// Add "_" to settings prefix if we use Carbon Fields
+//$settings_prefix = "_{$settings_prefix}";
+
+/**
+ * Delete plugin options from database
+ *
+ * @param string $settings_prefix
+ */
+function uninstall_delete_data( string $settings_prefix ) {
+	
+	global $wpdb;
+
+	$plugin_options = $wpdb->get_results( "SELECT option_name FROM  {$wpdb->prefix}options WHERE option_name LIKE '{$settings_prefix}%' " );
+	
+	foreach ( $plugin_options as $plugin_option ) {
+		delete_option( $plugin_option->option_name );
+	}
 }
+
+if ( is_multisite() ) {
+	$sites = get_sites();
+	
+	foreach ( $sites as $site ) {
+		switch_to_blog( $site->blog_id );
+		uninstall_delete_data( $settings_prefix );
+		restore_current_blog();
+	}
+} else {
+	uninstall_delete_data( $settings_prefix );
+}
+
+wp_cache_flush();
