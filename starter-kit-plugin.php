@@ -49,6 +49,5 @@ $config = apply_filters( 'starter-kit-plugin/config', require STARTER_KIT_PLUGIN
 try {
 	$app->run( $config );
 } catch ( Throwable $throwable ) {
-	//Utils::setErrorHandler();
 	Utils::errorHandler( $throwable );
 }

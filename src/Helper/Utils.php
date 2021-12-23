@@ -49,18 +49,15 @@ class Utils {
 		return $value;
 	}
 	
-	public static function setErrorHandler() {
-		// for disabling wordpress default shutdown handler for fatal errors
-		if ( ! defined( 'WP_SANDBOX_SCRAPING' ) ) {
-			define( 'WP_SANDBOX_SCRAPING', true );
-		}
-		
-		ini_set( 'html_errors', 'off' );
-		set_error_handler( [ static::class, 'errorHandler' ] );
-		register_shutdown_function( [ static::class, 'errorShutdownHandler' ] );
-	}
-	
 	public static function errorHandler( $throwable ) {
+	
+		$error_message = 'Starter Kit Plugin PHP error: ' . $throwable->getMessage();
+		$error_message .=  ' in ' . $throwable->getFile();
+		$error_message .=  ' on line ' . $throwable->getLine();
+		$error_message .=  PHP_EOL . $throwable->getTraceAsString ();
+		
+		error_log( $error_message );
+		
 		$errors_silent = self::getConfigSetting( 'errors_silent', '', true );
 	
 		if ( empty( $errors_silent ) ) {
