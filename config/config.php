@@ -14,6 +14,7 @@ return [
 	'cache_time'      => '202112211846',
 	'version'         => 10000,
 	'settings_prefix' => 'skp_',
+	'errors_silent'   => true,
 	'vendor_dir'      => STARTER_KIT_PLUGIN_DIR . '/vendor/',
 	'assets_uri'      => STARTER_KIT_PLUGIN_URL . '/assets/',
 	
